@@ -167,16 +167,20 @@
 			</div> 
           
           <div class="input-group smart-mode-highlight">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-                  <label style="color: #fff; font-weight:800; font-size:15px; cursor:pointer;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <label style="color: #fff; font-weight:800; font-size:14px; cursor:pointer;">
                       🚀 โหมดอัจฉริยะ (Smart Auto)
                   </label>
-                  <label class="switch">
-                    <input type="checkbox" id="banana-smart-auto-checkbox">
-                    <span class="slider"></span>
-                  </label>
               </div>
-              <div style="font-size: 12px; color: #e0e7ff; opacity:0.9;">AI คิดชุด/ฉาก/สไตล์ ให้เองอัตโนมัติ</div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
+                  <div class="char-card smart-mode-card active" data-value="preset" style="text-align:center; padding:10px 8px; cursor:pointer; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg-input); color:var(--text-dim); font-size:12px; transition:all 0.2s;">
+                      🎲 สุ่มจาก Preset<br><span style="font-size:10px; color:#666;">เร็วกว่า, สุ่มคำสั่งเดิมๆ</span>
+                  </div>
+                  <div class="char-card smart-mode-card" data-value="ai" style="text-align:center; padding:10px 8px; cursor:pointer; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg-input); color:var(--text-dim); font-size:12px; transition:all 0.2s;">
+                      🧠 ใช้ AI คิด<br><span style="font-size:10px; color:#666;">คุณภาพสูงกว่า, ไม่ซ้ำ</span>
+                  </div>
+              </div>
+              <input type="hidden" id="banana-smart-mode" value="preset">
           </div>
 
    
@@ -400,16 +404,20 @@
 		  
 
           <div class="input-group smart-mode-highlight" style="margin-bottom:12px; padding: 12px !important; border-color:#8b5cf6 !important; background: linear-gradient(135deg, #2e1065 0%, #1e1e24 100%) !important;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                   <label style="color: #fff; font-weight:800; font-size:13px;">
                       🚀 โหมดอัจฉริยะ (Smart Mascot)
                   </label>
-                  <label class="switch">
-                      <input type="checkbox" id="mascot-smart-auto-checkbox">
-                      <span class="slider"></span>
-                  </label>
               </div>
-              <div style="font-size: 10px; color: #e9d5ff; opacity:0.8; margin-top:4px;">AI คิดท่าทาง/ฉาก ให้เข้ากับมาสคอตอัตโนมัติ</div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
+                  <div class="char-card smart-mode-card active" data-value="preset" style="text-align:center; padding:10px 8px; cursor:pointer; border:1px solid #555; border-radius:var(--radius); background:rgba(0,0,0,0.3); color:#a1a1aa; font-size:11px; transition:all 0.2s;">
+                      🎲 สุ่มจาก Preset<br><span style="font-size:9px; color:#666;">เร็วกว่า</span>
+                  </div>
+                  <div class="char-card smart-mode-card" data-value="ai" style="text-align:center; padding:10px 8px; cursor:pointer; border:1px solid #555; border-radius:var(--radius); background:rgba(0,0,0,0.3); color:#a1a1aa; font-size:11px; transition:all 0.2s;">
+                      🧠 ใช้ AI คิด<br><span style="font-size:9px; color:#666;">คุณภาพสูงกว่า</span>
+                  </div>
+              </div>
+              <input type="hidden" id="mascot-smart-mode" value="preset">
           </div>
 		  
 	
@@ -904,7 +912,23 @@
       </div>
       
       <div class="input-group">
-        <div class="input-row"><label style="color:#a1a1aa; font-size:12px; font-weight:600;">สัดส่วนภาพและวิดีโอ (Aspect Ratio)</label></div>
+        <div class="input-row"><label style="color:#a1a1aa; font-size:12px; font-weight:600;">🤖 AI Model (สำหรับสร้างบท Storytelling)</label></div>
+        <select id="settings-ai-model" class="theme-input" style="cursor:pointer; appearance:none; margin-top:5px; background-image: url('data:image/svg+xml;utf8,<svg fill=\"%2300f2fe\" height=\"24\" viewBox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5z\"/><path d=\"M0 0h24v24H0z\" fill=\"none\"/></svg>'); background-repeat: no-repeat; background-position-x: 96%; background-position-y: 50%;">
+          <option value="gemini-2.0-flash-lite">⚡ Gemini 2.0 Flash Lite (เร็ว)</option>
+          <option value="gemini-2.5-pro" selected>🧠 Gemini 2.5 Pro (คิดลึก คุณภาพสูง)</option>
+          <option value="gemini-2.5-flash">🌟 Gemini 2.5 Flash (กลางๆ)</option>
+          <option value="gemini-2.0-flash">🚀 Gemini 2.0 Flash (เร็ว)</option>
+        </select>
+        <div style="font-size:10px; color:#666; margin-top:4px;">*ใช้เฉพาะ Storytelling Generate — Images/Video ใช้ Google AI Studio</div>
+      </div>
+
+      <div class="input-group" style="margin-top:15px;">
+        <div class="input-row"><label style="color:#a1a1aa; font-size:12px; font-weight:600;">🔑 Gemini API Key</label></div>
+        <input type="password" id="settings-gemini-api-key" class="theme-input" style="width:100%; padding:10px; background:#1e1e24; border:1px solid #333; color:#fff; border-radius:8px; font-size:13px; margin-top:5px; box-sizing:border-box;" placeholder="วาง API key ที่นี่...">
+      </div>
+
+      <div class="input-group">
+        <div class="input-row"><label style="color:#a1a1aa; font-size:12px; font-weight:600;">📐 สัดส่วนภาพและวิดีโอ (Aspect Ratio)</label></div>
         <select id="veo3-aspect-ratio" class="theme-input" style="cursor:pointer; appearance:none; margin-top:5px; background-image: url('data:image/svg+xml;utf8,<svg fill=\"%2300f2fe\" height=\"24\" viewBox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5z\"/><path d=\"M0 0h24v24H0z\" fill=\"none\"/></svg>'); background-repeat: no-repeat; background-position-x: 96%; background-position-y: 50%;">
           <option value="9:16">📱 แนวตั้ง 9:16 (TikTok / Reels / Shorts)</option>
           <option value="16:9">🖥️ แนวนอน 16:9 (YouTube / Facebook)</option>

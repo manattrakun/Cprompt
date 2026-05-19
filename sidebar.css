@@ -32,3 +32,9 @@
 .story-music-card { cursor: pointer; text-align: center; padding: 10px 8px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-input); color: var(--text-dim); transition: all 0.2s; font-size: 12px; }
 .story-music-card:hover { border-color: #10b981; color: #d1fae5; }
 .story-music-card.active { border-color: #10b981; background: #064e3b; color: #d1fae5; box-shadow: 0 0 8px rgb(16 185 129 / 0.3); }
+
+/* Smart Mode Toggle Cards */
+.smart-mode-card { transition: all 0.2s; user-select: none; }
+.smart-mode-card:hover { border-color: #a855f7; color: #e9d5ff; transform: translateY(-1px); }
+.smart-mode-card.active { border-color: #a855f7; background: linear-gradient(135deg, #2e1065 0%, #1e1e24 100%); color: #e9d5ff; box-shadow: 0 0 12px rgb(168 85 247 / 0.4); }
+.smart-mode-card .disabled-section { opacity: 0.5; pointer-events: none; }
