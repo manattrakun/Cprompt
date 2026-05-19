@@ -38,3 +38,34 @@
 .smart-mode-card:hover { border-color: #a855f7; color: #e9d5ff; transform: translateY(-1px); }
 .smart-mode-card.active { border-color: #a855f7; background: linear-gradient(135deg, #2e1065 0%, #1e1e24 100%); color: #e9d5ff; box-shadow: 0 0 12px rgb(168 85 247 / 0.4); }
 .smart-mode-card .disabled-section { opacity: 0.5; pointer-events: none; }
+
+/* Story tab button active style */
+.segment-btn.active[data-tab="story"] {
+  background: linear-gradient(135deg, #a855f7, #6366f1) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 800 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgb(168 85 247 / 0.3) !important;
+}
+
+/* Smart mode card base styles (in case inline styles don't apply) */
+.smart-mode-card {
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-input);
+  color: var(--text-dim);
+  font-size: 12px;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+/* Ensure story cards don't get disabled by .disabled-section */
+#tab-content-story .disabled-section {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  filter: none !important;
+}

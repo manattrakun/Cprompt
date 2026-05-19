@@ -241,6 +241,16 @@ const vRandomCheckbox=document.getElementById('video-random-style-switch');if(vR
 const ugcOption=document.querySelector('.config-option[data-type="vstyle"][data-value="16"]');if(ugcOption){ugcOption.click();bananaAddLog('🤳 บังคับใช้สไตล์: รีวิวบ้านๆ (UGC)','success')}
 await videoRunAutomation();bananaUpdateStatus('🎬 เสร็จสิ้น! สร้างภาพและวิดีโอเสร็จแล้ว');showToast('สร้างภาพและวิดีโอเสร็จแล้ว!','success')}catch(error){if(error.message==='STOPPED'){bananaUpdateStatus('หยุดการทำงานแล้ว');showToast('หยุดตามคำสั่งผู้ใช้','warning')}else{bananaUpdateStatus(`❌ Error: ${error.message}`);showToast('เกิดข้อผิดพลาด: '+error.message,'error')}}finally{bananaIsAutomationRunning=!1;bananaShouldStopAutomation=!1;await toggleWebPageLock(!1);if(bananaBtnAutomation){bananaBtnAutomation.disabled=!1;bananaBtnAutomation.innerHTML='<span>START GENERATE</span>'}
 if(bananaBtnStop){bananaBtnStop.style.display='none'}}}
+function toggleLock(element, lock) {
+  if (!element) return;
+  var group = element.closest ? element.closest('.input-group') : null;
+  if (group) {
+    if (lock) group.classList.add('disabled-section');
+    else group.classList.remove('disabled-section');
+  }
+  if (element.disabled !== undefined) element.disabled = lock;
+}
+
 function bananaSetupEventListeners(){const mascotSmartMode=document.getElementById('mascot-smart-mode');const mascotBgInput=document.getElementById('mascot-bg-select');const mascotOutfitInput=document.getElementById('mascot-outfit-select');const mascotCustomBg=document.getElementById('mascot-custom-bg-input');const mascotCustomOutfit=document.getElementById('mascot-custom-outfit-input');const mascotTextCheck=document.getElementById('mascot-text-overlay-checkbox');const mascotTextBox=document.getElementById('mascot-text-box');// Mascot smart mode toggle
 if(mascotSmartMode){const mascotSmartCards=document.querySelectorAll('#workspace-mascot .smart-mode-card');mascotSmartCards.forEach(card=>{card.addEventListener('click',()=>{mascotSmartCards.forEach(c=>c.classList.remove('active'));card.classList.add('active');document.getElementById('mascot-smart-mode').value=card.dataset.value;if(card.dataset.value==='ai'){if(mascotBgInput)toggleLock(mascotBgInput,!0);if(mascotOutfitInput)toggleLock(mascotOutfitInput,!0);if(mascotCustomBg)mascotCustomBg.disabled=!0;if(mascotCustomOutfit)mascotCustomOutfit.disabled=!0}else{if(mascotBgInput)toggleLock(mascotBgInput,!1);if(mascotOutfitInput)toggleLock(mascotOutfitInput,!1);if(mascotCustomBg)mascotCustomBg.disabled=!1;if(mascotCustomOutfit)mascotCustomOutfit.disabled=!1}})});}
 const manualContainer=document.getElementById('manual-config-container');const textCheckbox=document.getElementById('banana-text-overlay-checkbox');const textOverlayBox=textCheckbox?textCheckbox.closest('.special-box'):null;
