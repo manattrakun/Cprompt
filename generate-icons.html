@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>เครื่องมือเสกไอคอน: Stealth Purple Border</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: #0f0f12; color: #fff;
+            display: flex; height: 100vh; margin: 0;
+            align-items: center; justify-content: center;
+        }
+        .container {
+            text-align: center; background: #18181b; padding: 40px;
+            border-radius: 20px; border: 1px solid #333;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+        button {
+            background: linear-gradient(135deg, #6366f1, #d946ef);
+            color: #fff; border: none; padding: 15px 40px; border-radius: 10px;
+            font-size: 18px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4); transition: 0.2s;
+        }
+        button:hover { filter: brightness(1.2); transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="width: 80px; height: 80px; background: linear-gradient(#0f0f12, #0f0f12) padding-box, linear-gradient(135deg, #6366f1, #d946ef) border-box; border: 3px solid transparent; color: #a855f7; font-size: 50px; font-weight: 900; display: flex; align-items: center; justify-content: center; border-radius: 18px; margin: 0 auto 20px; box-shadow: 0 0 20px rgba(217, 70, 239, 0.4);">P</div>
+        
+        <h1>ตัวเสกไอคอน (Stealth Purple)</h1>
+        <p style="color:#aaa; margin-bottom: 30px;">พื้นดำ ขอบไล่เฉดสี และตัว P สีม่วงล้ำๆ</p>
+        <button onclick="generateAllIcons()">📥 โหลดไอคอนชุดใหม่ทั้งหมด</button>
+    </div>
+
+    <script>
+        function drawIconToCanvas(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size; canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            const borderRadius = size * (24 / 128);
+            const borderWidth = size * (6 / 128); // ความหนาของขอบ
+
+            // 1. วาดกรอบ Gradient (เทคนิคคือวาดเต็มพื้นที่เป็นสีไล่เฉดก่อน)
+            const bgGradient = ctx.createLinearGradient(0, 0, size, size);
+            bgGradient.addColorStop(0, '#6366f1'); // ฟ้าอมม่วง
+            bgGradient.addColorStop(1, '#d946ef'); // ชมพูอมม่วง
+
+            ctx.fillStyle = bgGradient;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, borderRadius);
+            ctx.fill();
+
+            // 2. วาดพื้นสีดำทับตรงกลาง (ให้เหลือขอบไว้รอบๆ)
+            ctx.fillStyle = '#0f0f12'; // สีดำดุ
+            ctx.beginPath();
+            ctx.roundRect(borderWidth, borderWidth, size - (borderWidth*2), size - (borderWidth*2), borderRadius - (borderWidth*0.5));
+            ctx.fill();
+
+            // 3. ตัวหนังสือ P สีม่วงสว่าง
+            const fontSize = size * (80 / 128);
+            ctx.font = `900 ${fontSize}px Arial, sans-serif`;
+            ctx.fillStyle = '#a855f7'; // สีม่วง (Purple)
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // วาดตัวหนังสือไว้ตรงกลาง
+            ctx.fillText('P', size / 2, size / 2 + (size * 0.02)); 
+            return canvas;
+        }
+
+        function downloadCanvasAsPng(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function generateAllIcons() {
+            [16, 32, 48, 128].forEach(size => {
+                const canvas = drawIconToCanvas(size);
+                downloadCanvasAsPng(canvas, `icon${size}.png`);
+            });
+            alert('✅ โหลดสำเร็จ! นำไฟล์รูปทั้ง 4 ขนาดไปวางทับในโฟลเดอร์ Extension ได้เลยครับ');
+        }
+    </script>
+</body>
+</html>
