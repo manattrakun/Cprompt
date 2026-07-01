@@ -191,6 +191,7 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
             "MinFreeMB",
             "Expand-Archive",
             "bootstrap-result.json",
+            "outputs",
             "C:\\kubdee-affiliate",
             "GITHUB_TOKEN",
         ],
@@ -212,6 +213,7 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
             "Invoke-WorkerPowerShell -ScriptPath $script -IncludePython",
         ],
         "tools/kubdee_affiliate/collect_support_bundle.py": [
+            "outputs/bootstrap-result.json",
             "outputs/first-run-diagnostics-*.json",
             "outputs/first-run-diagnostics-*.txt",
             "outputs/first-run-prerequisites-*.json",
@@ -225,6 +227,7 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
         "README_FIRST.md": [
             "bootstrap_github_release.ps1",
             "bootstrap-result.json",
+            "outputs\\",
             "free disk space",
             "14_first_run_diagnostics.cmd",
             "outputs\\first-run-diagnostics-*.txt",
@@ -234,6 +237,7 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
         "docs/kubdee-affiliate/WINDOWS_QUICKSTART.md": [
             "bootstrap_github_release.ps1",
             "bootstrap-result.json",
+            "support bundles",
             "Failed to read GitHub release API",
             "Release is missing required assets",
             "Checksum mismatch",
@@ -262,6 +266,7 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
         "WINDOWS_TEST_HANDOFF.md": [
             "bootstrap_github_release.ps1",
             "bootstrap-result.json",
+            "outputs\\bootstrap-result.json",
             "do not continue with partially extracted files",
             "skip this section",
             "kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip",
@@ -276,6 +281,7 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
             "Windows version:",
             "Bootstrap script result:",
             "Bootstrap result JSON path:",
+            "outputs\\bootstrap-result.json",
             "Attached bootstrap result JSON:",
             "Transfer bundle verifier result:",
             "14_first_run_diagnostics.cmd completed:",

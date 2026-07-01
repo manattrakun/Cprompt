@@ -188,9 +188,14 @@ $report = [ordered]@{
 }
 $reportPath = Join-Path $Destination "bootstrap-result.json"
 $report | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $reportPath -Encoding UTF8
+$workerOutputDir = Join-Path $ExtractRoot "outputs"
+New-DirectoryIfMissing -Path $workerOutputDir
+$workerReportPath = Join-Path $workerOutputDir "bootstrap-result.json"
+$report | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $workerReportPath -Encoding UTF8
 
 Write-Host ""
 Write-Host "Bootstrap complete."
 Write-Host "Worker path: $ExtractRoot"
 Write-Host "Bootstrap report: $reportPath"
+Write-Host "Worker bootstrap report: $workerReportPath"
 Write-Host "Next step: double-click START_HERE.cmd or 14_first_run_diagnostics.cmd in $ExtractRoot"

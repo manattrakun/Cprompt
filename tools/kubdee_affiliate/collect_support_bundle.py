@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_PATTERNS = (
     "logs/*.log",
+    "outputs/bootstrap-result.json",
     "outputs/prerequisites-*.json",
     "outputs/first-run-diagnostics-*.json",
     "outputs/first-run-diagnostics-*.txt",

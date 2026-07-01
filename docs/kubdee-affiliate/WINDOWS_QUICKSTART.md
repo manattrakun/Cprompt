@@ -41,8 +41,9 @@ transfer bundle, verifies both checksums, and extracts the worker package to:
 C:\kubdee-affiliate
 ```
 
-It also writes `C:\kubdee-affiliate-downloads\bootstrap-result.json` for
-handoff/debugging.
+It also writes `C:\kubdee-affiliate-downloads\bootstrap-result.json` and
+`C:\kubdee-affiliate\outputs\bootstrap-result.json` for handoff/debugging. The
+copy under `outputs\` is included in support bundles.
 
 If bootstrap fails:
 

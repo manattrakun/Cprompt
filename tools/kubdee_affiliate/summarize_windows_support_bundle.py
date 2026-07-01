@@ -62,6 +62,7 @@ def summarize(bundle: Path) -> dict[str, Any]:
     with zipfile.ZipFile(bundle) as archive:
         names = archive.namelist()
         manifest = read_json(archive, "SUPPORT_BUNDLE_MANIFEST.json") or {}
+        bootstrap_name = "outputs/bootstrap-result.json" if "outputs/bootstrap-result.json" in names else None
         first_run_name = latest_name(names, "outputs/first-run-diagnostics-")
         acceptance_name = latest_name(names, "outputs/windows-acceptance-")
         worker_status_name = latest_name(names, "outputs/worker-status-")
@@ -69,6 +70,7 @@ def summarize(bundle: Path) -> dict[str, Any]:
             names, "outputs/prerequisites-"
         )
 
+        bootstrap = read_json(archive, bootstrap_name) if bootstrap_name else None
         first_run = read_json(archive, first_run_name) if first_run_name else None
         acceptance = read_json(archive, acceptance_name) if acceptance_name else None
         worker_status = read_json(archive, worker_status_name) if worker_status_name else None
@@ -97,12 +99,16 @@ def summarize(bundle: Path) -> dict[str, Any]:
             "fileCount": len(manifest.get("files", [])) if isinstance(manifest.get("files"), list) else None,
         },
         "reports": {
+            "bootstrap": bootstrap_name,
             "firstRunDiagnostics": first_run_name,
             "acceptance": acceptance_name,
             "workerStatus": worker_status_name,
             "prerequisites": prerequisites_name,
         },
         "readiness": {
+            "bootstrapOk": bootstrap.get("ok") if bootstrap else None,
+            "bootstrapReleaseTag": bootstrap.get("releaseTag") if bootstrap else None,
+            "bootstrapExtractRoot": bootstrap.get("extractRoot") if bootstrap else None,
             "firstRunOk": first_run.get("ok") if first_run else None,
             "acceptanceOk": acceptance.get("ok") if acceptance else None,
             "basicOk": acceptance.get("basicOk") if acceptance else None,

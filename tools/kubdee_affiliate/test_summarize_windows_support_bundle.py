@@ -39,10 +39,20 @@ def main() -> int:
                     "platform": "Windows-10",
                     "includePayloads": False,
                     "files": [
+                        "outputs/bootstrap-result.json",
                         "outputs/first-run-diagnostics-20260701-120000.json",
                         "outputs/windows-acceptance-20260701-120000.json",
                         "outputs/worker-status-20260701-120000.json",
                     ],
+                },
+            )
+            write_json(
+                archive,
+                "outputs/bootstrap-result.json",
+                {
+                    "ok": True,
+                    "releaseTag": "kubdee-affiliate-worker-2026-07-01-bootstrap-hardened",
+                    "extractRoot": "C:\\kubdee-affiliate",
                 },
             )
             write_json(
@@ -103,7 +113,11 @@ def main() -> int:
 
         summary = summarize(bundle)
         assert summary["ok"] is False
-        assert summary["manifest"]["fileCount"] == 3
+        assert summary["manifest"]["fileCount"] == 4
+        assert summary["reports"]["bootstrap"] == "outputs/bootstrap-result.json"
+        assert summary["readiness"]["bootstrapOk"] is True
+        assert summary["readiness"]["bootstrapReleaseTag"] == "kubdee-affiliate-worker-2026-07-01-bootstrap-hardened"
+        assert summary["readiness"]["bootstrapExtractRoot"] == "C:\\kubdee-affiliate"
         assert summary["readiness"]["prerequisitesOk"] is True
         assert summary["readiness"]["doctor"]["readyForKubdeeImport"] is False
         assert summary["readiness"]["inputFiles"]["feedExists"] is True
