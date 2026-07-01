@@ -41,6 +41,10 @@ kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.sha256
 kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.verify.cmd
 ```
 
+Keep these asset names exact. `bootstrap_github_release.ps1` resolves release
+assets by these fixed names, so changing them requires updating the bootstrap
+script, package builder, validator, workflow, and docs together.
+
 On Windows, the recommended path is to download `bootstrap_github_release.ps1`
 and run it in PowerShell. For a private repository, pass `-Token` or set
 `GITHUB_TOKEN`. The bootstrap downloads the transfer bundle assets, verifies

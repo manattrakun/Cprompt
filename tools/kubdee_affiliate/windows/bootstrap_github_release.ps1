@@ -4,15 +4,50 @@ param(
     [string]$Destination = "C:\kubdee-affiliate-downloads",
     [string]$ExtractRoot = "C:\kubdee-affiliate",
     [string]$Token = $env:GITHUB_TOKEN,
+    [int]$MinFreeMB = 500,
     [switch]$Force
 )
 
 $ErrorActionPreference = "Stop"
 
+try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+} catch {
+    Write-Host "Could not force TLS 1.2; continuing with system defaults."
+}
+
 function New-DirectoryIfMissing {
     param([string]$Path)
     if (-not (Test-Path -LiteralPath $Path)) {
         New-Item -ItemType Directory -Path $Path | Out-Null
+    }
+}
+
+function Assert-WritableDirectory {
+    param([string]$Path)
+
+    New-DirectoryIfMissing -Path $Path
+    $probePath = Join-Path $Path ".kubdee-write-test-$([guid]::NewGuid().ToString('N')).tmp"
+    try {
+        "write-test" | Set-Content -LiteralPath $probePath -Encoding ASCII
+        Remove-Item -LiteralPath $probePath -Force
+    } catch {
+        throw "Directory is not writable: $Path. Run PowerShell as a user that can write there, choose another -Destination/-ExtractRoot, or use -Force only after backing up existing files. Details: $($_.Exception.Message)"
+    }
+}
+
+function Assert-MinFreeSpace {
+    param(
+        [string]$Path,
+        [int]$RequiredMB
+    )
+
+    $root = [System.IO.Path]::GetPathRoot((Resolve-Path -LiteralPath $Path).Path)
+    $driveName = $root.Substring(0, 1)
+    $drive = Get-PSDrive -Name $driveName -ErrorAction Stop
+    $freeMB = [math]::Floor($drive.Free / 1MB)
+    if ($freeMB -lt $RequiredMB) {
+        throw "Not enough free space on $root. Required at least $RequiredMB MB, found $freeMB MB."
     }
 }
 
@@ -30,7 +65,11 @@ function Get-GitHubHeaders {
 
 function Invoke-GitHubJson {
     param([string]$Uri)
-    Invoke-RestMethod -Uri $Uri -Headers (Get-GitHubHeaders)
+    try {
+        Invoke-RestMethod -Uri $Uri -Headers (Get-GitHubHeaders)
+    } catch {
+        throw "Failed to read GitHub release API. If the repository is private, pass -Token or set GITHUB_TOKEN. Details: $($_.Exception.Message)"
+    }
 }
 
 function Save-GitHubAsset {
@@ -41,7 +80,7 @@ function Save-GitHubAsset {
 
     $headers = Get-GitHubHeaders
     $headers["Accept"] = "application/octet-stream"
-    Invoke-WebRequest -Uri $Asset.url -Headers $headers -OutFile $OutputPath
+    Invoke-WebRequest -Uri $Asset.url -Headers $headers -OutFile $OutputPath -UseBasicParsing
 }
 
 function Assert-FileSha256 {
@@ -78,7 +117,11 @@ $releaseUri = if ($Tag -eq "latest") {
     "https://api.github.com/repos/$Repo/releases/tags/$Tag"
 }
 
-New-DirectoryIfMissing -Path $Destination
+Write-Host "PowerShell execution policy: $(Get-ExecutionPolicy)"
+Assert-WritableDirectory -Path $Destination
+Assert-WritableDirectory -Path $ExtractRoot
+Assert-MinFreeSpace -Path $Destination -RequiredMB $MinFreeMB
+Assert-MinFreeSpace -Path $ExtractRoot -RequiredMB $MinFreeMB
 
 Write-Host "Reading GitHub release: $Repo / $Tag"
 $release = Invoke-GitHubJson -Uri $releaseUri
@@ -129,7 +172,25 @@ Assert-FileSha256 -FilePath $packageZip -ChecksumPath $packageSha
 Write-Host "Extracting worker package to $ExtractRoot"
 Expand-ZipCleanly -ZipPath $packageZip -TargetPath $ExtractRoot
 
+$report = [ordered]@{
+    ok = $true
+    repo = $Repo
+    tag = $Tag
+    releaseTag = $release.tag_name
+    releaseUrl = $release.html_url
+    destination = $Destination
+    transferBundle = $bundleZip
+    transferBundleChecksum = $bundleSha
+    packageZip = $packageZip
+    packageChecksum = $packageSha
+    extractRoot = $ExtractRoot
+    completedAt = (Get-Date).ToString("o")
+}
+$reportPath = Join-Path $Destination "bootstrap-result.json"
+$report | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $reportPath -Encoding UTF8
+
 Write-Host ""
 Write-Host "Bootstrap complete."
 Write-Host "Worker path: $ExtractRoot"
+Write-Host "Bootstrap report: $reportPath"
 Write-Host "Next step: double-click START_HERE.cmd or 14_first_run_diagnostics.cmd in $ExtractRoot"

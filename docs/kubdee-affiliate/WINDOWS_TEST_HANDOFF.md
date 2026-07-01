@@ -20,7 +20,12 @@ powershell -ExecutionPolicy Bypass -File .\bootstrap_github_release.ps1 `
 
 For a private repository, pass `-Token` or set `GITHUB_TOKEN`. The bootstrap
 downloads the release assets, verifies the transfer bundle checksum, verifies
-the package checksum, and extracts the package to `C:\kubdee-affiliate`.
+the package checksum, extracts the package to `C:\kubdee-affiliate`, and writes
+`C:\kubdee-affiliate-downloads\bootstrap-result.json`.
+
+If bootstrap fails, do not continue with partially extracted files. Capture the
+error text and check token access, release asset names, checksum mismatch,
+write permission, and free disk space.
 
 Manual fallback: copy these three files together:
 
@@ -92,6 +97,7 @@ outputs\support-bundle-*.zip
 Send these files back after the first run:
 
 ```text
+C:\kubdee-affiliate-downloads\bootstrap-result.json
 outputs\first-run-diagnostics-*.txt
 outputs\support-bundle-*.zip
 ```

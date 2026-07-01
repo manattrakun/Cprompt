@@ -18,6 +18,7 @@ Facebook logged in on Chrome: yes / no / not tested
 
 ```text
 Bootstrap script result: passed / failed / not used
+Bootstrap result JSON path: C:\kubdee-affiliate-downloads\bootstrap-result.json / other:
 Transfer bundle verifier result: passed / failed
 Main zip verifier result: passed / failed
 Installed path: C:\kubdee-affiliate / other:
@@ -47,6 +48,7 @@ Attach these files:
 ```text
 outputs\first-run-diagnostics-*.txt
 outputs\support-bundle-*.zip
+C:\kubdee-affiliate-downloads\bootstrap-result.json
 ```
 
 The diagnostics JSON is already included in the support bundle by default.
@@ -54,6 +56,7 @@ The diagnostics JSON is already included in the support bundle by default.
 ```text
 Attached diagnostics txt: yes / no
 Attached support bundle zip: yes / no
+Attached bootstrap result JSON: yes / no / not used
 Attached screenshot if useful: yes / no
 ```
 

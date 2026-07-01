@@ -41,6 +41,22 @@ transfer bundle, verifies both checksums, and extracts the worker package to:
 C:\kubdee-affiliate
 ```
 
+It also writes `C:\kubdee-affiliate-downloads\bootstrap-result.json` for
+handoff/debugging.
+
+If bootstrap fails:
+
+- `Failed to read GitHub release API`: check the repo/tag and pass `-Token` or
+  set `$env:GITHUB_TOKEN` for a private repository.
+- `Release is missing required assets`: use the latest GitHub Release or ask
+  for a new release; the bootstrap depends on the exact transfer bundle asset
+  names.
+- `Checksum mismatch`: delete `C:\kubdee-affiliate-downloads`, download again,
+  and do not continue with the extracted files.
+- `Directory is not writable` or `Not enough free space`: rerun with another
+  `-Destination` / `-ExtractRoot`, free disk space, or use a Windows account
+  with write permission.
+
 Then double-click `START_HERE.cmd` in the package root.
 
 Manual fallback:

@@ -13,7 +13,10 @@ Required before first setup:
 If starting from GitHub Releases on Windows, download
 `bootstrap_github_release.ps1` first. Run it in PowerShell to download, verify,
 and extract the worker package to `C:\kubdee-affiliate`. For a private GitHub
-repository, pass `-Token` or set `GITHUB_TOKEN` before running it.
+repository, pass `-Token` or set `GITHUB_TOKEN` before running it. The bootstrap
+writes `C:\kubdee-affiliate-downloads\bootstrap-result.json`.
+If it fails, check token access, exact release asset names, checksum mismatch,
+write permission, and free disk space before continuing.
 
 Recommended first run:
 
