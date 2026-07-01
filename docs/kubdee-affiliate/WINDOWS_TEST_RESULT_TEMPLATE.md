@@ -17,6 +17,7 @@ Facebook logged in on Chrome: yes / no / not tested
 ## Package Transfer
 
 ```text
+Bootstrap script result: passed / failed / not used
 Transfer bundle verifier result: passed / failed
 Main zip verifier result: passed / failed
 Installed path: C:\kubdee-affiliate / other:

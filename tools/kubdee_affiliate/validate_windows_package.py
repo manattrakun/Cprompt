@@ -245,6 +245,7 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
         ],
         "WINDOWS_TEST_HANDOFF.md": [
             "bootstrap_github_release.ps1",
+            "skip this section",
             "kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip",
             "kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.sha256",
             "kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.verify.cmd",
@@ -255,6 +256,7 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
         ],
         "WINDOWS_TEST_RESULT_TEMPLATE.md": [
             "Windows version:",
+            "Bootstrap script result:",
             "Transfer bundle verifier result:",
             "14_first_run_diagnostics.cmd completed:",
             "outputs\\first-run-diagnostics-*.txt path:",

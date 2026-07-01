@@ -44,6 +44,9 @@ Transfer bundle checksum OK.
 
 ## Extract
 
+If the bootstrap completed successfully, skip this section and continue with
+`First Windows Run`.
+
 Unzip the transfer bundle. Then double-click:
 
 ```text
