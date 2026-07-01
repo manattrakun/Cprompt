@@ -1,0 +1,20 @@
+{
+  "jobs": [
+    {
+      "name": "rainy-main-page-review",
+      "enabled": true,
+      "stage": "Review",
+      "theme": "rainy",
+      "campaign": "",
+      "profileName": "Reel promote shopee",
+      "pageName": "",
+      "limit": 20,
+      "jitterMinutes": 15,
+      "commitImport": false,
+      "preparePipeline": false,
+      "applyPipeline": false,
+      "exportFacebookQueue": false,
+      "facebookMode": "skip"
+    }
+  ]
+}

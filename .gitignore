@@ -1,0 +1,45 @@
+# OS/editor noise
+.DS_Store
+
+# Local Codex/runtime state
+.codex/
+
+# Python/runtime caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local worker state and payloads
+data/
+logs/
+outputs/
+config/worker.config.json
+*.db
+*.sqlite
+*.sqlite3
+
+# Large/private affiliate feeds and generated media
+*.csv
+!tools/kubdee_affiliate/sample_feed.csv
+*.mp4
+*.mov
+*.webm
+
+# Build/release artifacts; publish these as GitHub Release assets instead
+dist/
+build/
+cache/
+
+# Private/local working folders
+db/
+real/
+media/
+
+# Generated graph output
+graphify-out/
+
+# Temp/backup files
+*.log
+*.cache
+*.tmp
+*.bak

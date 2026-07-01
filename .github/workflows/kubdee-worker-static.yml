@@ -1,0 +1,36 @@
+name: Kubdee Worker Static Gate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+jobs:
+  static-release-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Prepare release assets
+        run: python3 tools/kubdee_affiliate/prepare_github_release.py
+
+      - name: Upload static release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kubdee-affiliate-windows-worker-static-assets
+          if-no-files-found: error
+          path: |
+            dist/kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip
+            dist/kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.sha256
+            dist/kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.verify.cmd
+            dist/github-release-assets.json
+            dist/github-release-notes.md
