@@ -20,8 +20,10 @@ C:\kubdee-affiliate\
   docs\
 ```
 
-Copy this project folder to the Windows machine, then place the daily Shopee
-Product Feed at `data\product-feed.csv`.
+Recommended Windows transfer path: download `bootstrap_github_release.ps1` from
+GitHub Releases, then run it in PowerShell. It downloads the release transfer
+bundle, verifies checksums, and extracts the package to `C:\kubdee-affiliate`.
+For private repositories, pass `-Token` or set `GITHUB_TOKEN`.
 
 To build a portable zip from the current repo:
 
@@ -29,8 +31,11 @@ To build a portable zip from the current repo:
 python3 tools/kubdee_affiliate/package_windows_worker.py --output dist
 ```
 
-Unzip the package on Windows to `C:\kubdee-affiliate`, then open
-`docs\kubdee-affiliate\WINDOWS_QUICKSTART.md`.
+Manual fallback: unzip the package on Windows to `C:\kubdee-affiliate`, then
+open `docs\kubdee-affiliate\WINDOWS_QUICKSTART.md`.
+
+After extraction, place the daily Shopee Product Feed at
+`data\product-feed.csv`.
 
 For commissions, use either:
 

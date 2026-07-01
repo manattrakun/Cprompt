@@ -10,6 +10,11 @@ Required before first setup:
 - Kubdee AI Desktop installed, logged in, and opened at least once
 - Google Chrome installed and logged into Facebook for Facebook draft/upload
 
+If starting from GitHub Releases on Windows, download
+`bootstrap_github_release.ps1` first. Run it in PowerShell to download, verify,
+and extract the worker package to `C:\kubdee-affiliate`. For a private GitHub
+repository, pass `-Token` or set `GITHUB_TOKEN` before running it.
+
 Recommended first run:
 
 1. Run `00_check_prerequisites.cmd`.
@@ -83,3 +88,5 @@ Keep the matching `.zip.transfer-bundle.zip.sha256` file beside it when copying.
 If a `.zip.transfer-bundle.zip.verify.cmd` file is present, double-click it on
 Windows before unzipping the transfer bundle.
 The `.zip.release.json` file records package metadata for audit/debugging.
+`tools\kubdee_affiliate\windows\bootstrap_github_release.ps1` can recreate this
+download/verify/extract flow directly from GitHub Releases.

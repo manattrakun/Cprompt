@@ -19,13 +19,31 @@ missing, install Python and reopen Command Prompt or PowerShell.
 
 ## 1. Copy Files
 
-Unzip this package to:
+Recommended GitHub Release path:
+
+1. Download `bootstrap_github_release.ps1` from the release assets.
+2. Open PowerShell in the download folder.
+3. Run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\bootstrap_github_release.ps1 `
+  -Repo "manattrakun/Cprompt" `
+  -Tag "latest" `
+  -Destination "C:\kubdee-affiliate-downloads" `
+  -ExtractRoot "C:\kubdee-affiliate"
+```
+
+For a private GitHub repository, pass `-Token "github_pat_..."` or set
+`$env:GITHUB_TOKEN` before running the script. The bootstrap downloads the
+transfer bundle, verifies both checksums, and extracts the worker package to:
 
 ```text
 C:\kubdee-affiliate
 ```
 
 Then double-click `START_HERE.cmd` in the package root.
+
+Manual fallback:
 
 Keep the `.zip` and `.zip.sha256` files together until after transfer. The
 checksum file is used to verify the package before use.

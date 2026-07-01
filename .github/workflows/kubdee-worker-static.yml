@@ -29,6 +29,7 @@ jobs:
           name: kubdee-affiliate-windows-worker-static-assets
           if-no-files-found: error
           path: |
+            tools/kubdee_affiliate/windows/bootstrap_github_release.ps1
             dist/kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip
             dist/kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.sha256
             dist/kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.verify.cmd

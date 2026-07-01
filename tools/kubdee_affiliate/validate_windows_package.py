@@ -53,6 +53,7 @@ REQUIRED_ENTRIES = (
     "tools/kubdee_affiliate/validate_repo_hygiene.py",
     "tools/kubdee_affiliate/summarize_windows_support_bundle.py",
     "tools/kubdee_affiliate/test_summarize_windows_support_bundle.py",
+    "tools/kubdee_affiliate/windows/bootstrap_github_release.ps1",
     "tools/kubdee_affiliate/windows/check_windows_prerequisites.ps1",
     "tools/kubdee_affiliate/windows/collect_support_bundle.ps1",
     "tools/kubdee_affiliate/windows/install_configured_scheduled_task.ps1",
@@ -68,6 +69,7 @@ REQUIRED_ENTRYPOINTS = {
     "windowsTestHandoff": "docs/kubdee-affiliate/WINDOWS_TEST_HANDOFF.md",
     "windowsTestResultTemplate": "docs/kubdee-affiliate/WINDOWS_TEST_RESULT_TEMPLATE.md",
     "startHere": "START_HERE.cmd",
+    "githubBootstrap": "tools/kubdee_affiliate/windows/bootstrap_github_release.ps1",
     "prerequisites": "tools/kubdee_affiliate/windows/check_windows_prerequisites.ps1",
     "workflow": "tools/kubdee_affiliate/windows/run_affiliate_workflow.ps1",
     "configuredWorkflow": "tools/kubdee_affiliate/windows/run_configured_workflow.ps1",
@@ -89,6 +91,7 @@ LAUNCHER_ROOT_FALLBACK = '..\\..\\..\\..\\tools\\kubdee_affiliate'
 
 FIRST_RUN_DIAGNOSTICS_PATH = "tools/kubdee_affiliate/windows/run_first_run_diagnostics.ps1"
 FIRST_RUN_LAUNCHER_PATH = "14_first_run_diagnostics.cmd"
+GITHUB_BOOTSTRAP_PATH = "tools/kubdee_affiliate/windows/bootstrap_github_release.ps1"
 
 
 def parse_args() -> argparse.Namespace:
@@ -161,6 +164,7 @@ def extract_powershell_params(text: str) -> set[str]:
 
 
 def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
+    bootstrap = read_archive_text(archive, GITHUB_BOOTSTRAP_PATH)
     diagnostics = read_archive_text(archive, FIRST_RUN_DIAGNOSTICS_PATH)
     launcher = read_archive_text(archive, FIRST_RUN_LAUNCHER_PATH)
     support = read_archive_text(archive, "tools/kubdee_affiliate/collect_support_bundle.py")
@@ -173,6 +177,16 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
     start_here = read_archive_text(archive, "START_HERE.cmd")
 
     required_fragments = {
+        GITHUB_BOOTSTRAP_PATH: [
+            "api.github.com/repos/$Repo/releases",
+            "kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip",
+            "kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.sha256",
+            "kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.verify.cmd",
+            "Get-FileHash -Algorithm SHA256",
+            "Expand-Archive",
+            "C:\\kubdee-affiliate",
+            "GITHUB_TOKEN",
+        ],
         FIRST_RUN_LAUNCHER_PATH: [
             'cd /d "%~dp0"',
             LAUNCHER_ROOT_FALLBACK,
@@ -202,18 +216,21 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
             "failedSteps",
         ],
         "README_FIRST.md": [
+            "bootstrap_github_release.ps1",
             "14_first_run_diagnostics.cmd",
             "outputs\\first-run-diagnostics-*.txt",
             "outputs\\support-bundle-*.zip",
             "WINDOWS_TEST_RESULT_TEMPLATE.md",
         ],
         "docs/kubdee-affiliate/WINDOWS_QUICKSTART.md": [
+            "bootstrap_github_release.ps1",
             "run_first_run_diagnostics.ps1",
             "14_first_run_diagnostics.cmd",
             "outputs\\first-run-diagnostics-*.txt",
             "outputs\\support-bundle-*.zip",
         ],
         "docs/kubdee-affiliate/GITHUB_HANDOFF.md": [
+            "bootstrap_github_release.ps1",
             "prepare_github_release.py",
             "summarize_windows_support_bundle.py",
             "test_summarize_windows_support_bundle.py",
@@ -227,6 +244,7 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
             "config\\worker.config.json",
         ],
         "WINDOWS_TEST_HANDOFF.md": [
+            "bootstrap_github_release.ps1",
             "kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip",
             "kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.sha256",
             "kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.verify.cmd",
@@ -248,6 +266,7 @@ def validate_first_run_diagnostics(archive: zipfile.ZipFile) -> None:
         ],
     }
     texts = {
+        GITHUB_BOOTSTRAP_PATH: bootstrap,
         FIRST_RUN_LAUNCHER_PATH: launcher,
         FIRST_RUN_DIAGNOSTICS_PATH: diagnostics,
         "tools/kubdee_affiliate/collect_support_bundle.py": support,
@@ -334,6 +353,10 @@ def validate_release_report_portability(report_path: Path, package_name: str) ->
         raise RuntimeError("release report windowsTestResultTemplate must be the package-relative docs path")
     if report.get("windowsTestResultTemplateBundleEntry") != "WINDOWS_TEST_RESULT_TEMPLATE.md":
         raise RuntimeError("release report windowsTestResultTemplateBundleEntry must match transfer bundle entry")
+    if report.get("githubBootstrap") != GITHUB_BOOTSTRAP_PATH:
+        raise RuntimeError("release report githubBootstrap must be the package-relative bootstrap path")
+    if report.get("githubBootstrapReleaseAsset") != "bootstrap_github_release.ps1":
+        raise RuntimeError("release report githubBootstrapReleaseAsset must match release asset entry")
 
 
 def main() -> int:
@@ -378,6 +401,8 @@ def main() -> int:
             release_report_path.name,
             "WINDOWS_TEST_HANDOFF.md",
             "WINDOWS_TEST_RESULT_TEMPLATE.md",
+            "bootstrap_github_release.ps1",
+            "GITHUB_TOKEN",
             transfer_bundle_path.name,
             transfer_bundle_checksum_path.name,
             transfer_bundle_verifier_path.name,

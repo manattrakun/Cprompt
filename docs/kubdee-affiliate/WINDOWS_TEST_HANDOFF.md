@@ -4,7 +4,25 @@ Use this when moving the Kubdee Affiliate worker package to a Windows machine.
 
 ## Copy To Windows
 
-Copy these three files together:
+Recommended GitHub Release path:
+
+1. Download `bootstrap_github_release.ps1`.
+2. Open PowerShell in the download folder.
+3. Run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\bootstrap_github_release.ps1 `
+  -Repo "manattrakun/Cprompt" `
+  -Tag "latest" `
+  -Destination "C:\kubdee-affiliate-downloads" `
+  -ExtractRoot "C:\kubdee-affiliate"
+```
+
+For a private repository, pass `-Token` or set `GITHUB_TOKEN`. The bootstrap
+downloads the release assets, verifies the transfer bundle checksum, verifies
+the package checksum, and extracts the package to `C:\kubdee-affiliate`.
+
+Manual fallback: copy these three files together:
 
 ```text
 kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip

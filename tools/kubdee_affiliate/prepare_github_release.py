@@ -13,6 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PACKAGE_NAME = "kubdee-affiliate-windows-worker-latest.zip"
+BOOTSTRAP_SCRIPT = ROOT / "tools/kubdee_affiliate/windows/bootstrap_github_release.ps1"
 
 
 def parse_args() -> argparse.Namespace:
@@ -68,6 +69,7 @@ def main() -> int:
     )
 
     required_assets = (
+        BOOTSTRAP_SCRIPT,
         transfer_bundle_path,
         transfer_bundle_checksum_path,
         transfer_bundle_verifier_path,
@@ -110,11 +112,21 @@ def main() -> int:
                 "",
                 "Windows test flow:",
                 "",
-                "1. Download the three assets.",
-                "2. Run the transfer bundle verifier.",
-                "3. Unzip the transfer bundle.",
+                "Recommended bootstrap flow:",
+                "",
+                "1. Download `bootstrap_github_release.ps1`.",
+                "2. Run it in PowerShell. For a private repository, pass `-Token` or set `GITHUB_TOKEN`.",
+                "3. Open `C:\\kubdee-affiliate`.",
                 "4. Follow `WINDOWS_TEST_HANDOFF.md`.",
                 "5. Run `14_first_run_diagnostics.cmd` on Windows.",
+                "",
+                "Manual fallback flow:",
+                "",
+                "1. Download the three transfer bundle assets.",
+                "2. Run the transfer bundle verifier.",
+                "3. Unzip the transfer bundle.",
+                "4. Run the package verifier.",
+                "5. Unzip the package to `C:\\kubdee-affiliate`.",
                 "",
                 "This release was statically validated only. Runtime testing belongs on the Windows machine.",
                 "",

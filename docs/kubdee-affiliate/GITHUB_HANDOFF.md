@@ -35,13 +35,20 @@ videos and generated media
 Attach these files to a GitHub Release instead of committing them:
 
 ```text
+bootstrap_github_release.ps1
 kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip
 kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.sha256
 kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip.verify.cmd
 ```
 
-On Windows, download the three release assets, run the verifier, unzip the
-transfer bundle, then follow `WINDOWS_TEST_HANDOFF.md`.
+On Windows, the recommended path is to download `bootstrap_github_release.ps1`
+and run it in PowerShell. For a private repository, pass `-Token` or set
+`GITHUB_TOKEN`. The bootstrap downloads the transfer bundle assets, verifies
+checksums, extracts the package to `C:\kubdee-affiliate`, then the user follows
+`WINDOWS_TEST_HANDOFF.md`.
+
+Manual fallback: download the three transfer bundle assets, run the verifier,
+unzip the transfer bundle, then follow `WINDOWS_TEST_HANDOFF.md`.
 Use `WINDOWS_TEST_RESULT_TEMPLATE.md` to report Windows diagnostics results
 back after running `14_first_run_diagnostics.cmd`; it is included in the
 package/transfer bundle and is not a separate release asset.
@@ -83,4 +90,5 @@ check out with CRLF line endings, while Python/source/docs stay LF.
 The workflow `.github/workflows/kubdee-worker-static.yml` runs the same static
 release gate on pull requests, pushes to `master`/`main`, and manual dispatch.
 It uploads the three transfer assets plus `github-release-assets.json` and
-`github-release-notes.md` as a workflow artifact.
+`github-release-notes.md` as a workflow artifact. It also uploads
+`bootstrap_github_release.ps1` for the direct Windows setup path.

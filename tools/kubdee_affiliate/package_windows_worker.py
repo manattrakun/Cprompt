@@ -41,6 +41,7 @@ INCLUDE_FILES = (
     "tools/kubdee_affiliate/test_summarize_windows_support_bundle.py",
     "tools/kubdee_affiliate/validate_repo_hygiene.py",
     "tools/kubdee_affiliate/validate_windows_package.py",
+    "tools/kubdee_affiliate/windows/bootstrap_github_release.ps1",
     "tools/kubdee_affiliate/windows/check_windows_prerequisites.ps1",
     "tools/kubdee_affiliate/windows/export_facebook_queue.ps1",
     "tools/kubdee_affiliate/windows/collect_support_bundle.ps1",
@@ -143,6 +144,7 @@ def main() -> int:
             "windowsTestHandoff": "docs/kubdee-affiliate/WINDOWS_TEST_HANDOFF.md",
             "windowsTestResultTemplate": "docs/kubdee-affiliate/WINDOWS_TEST_RESULT_TEMPLATE.md",
             "startHere": "START_HERE.cmd",
+            "githubBootstrap": "tools/kubdee_affiliate/windows/bootstrap_github_release.ps1",
             "prerequisites": "tools/kubdee_affiliate/windows/check_windows_prerequisites.ps1",
             "setup": "tools/kubdee_affiliate/windows/setup_worker_env.ps1",
             "doctor": "tools/kubdee_affiliate/windows/run_doctor.ps1",
@@ -182,6 +184,8 @@ def main() -> int:
     windows_test_result_template_path = ROOT / "docs/kubdee-affiliate/WINDOWS_TEST_RESULT_TEMPLATE.md"
     windows_test_handoff_manifest_path = "docs/kubdee-affiliate/WINDOWS_TEST_HANDOFF.md"
     windows_test_result_template_manifest_path = "docs/kubdee-affiliate/WINDOWS_TEST_RESULT_TEMPLATE.md"
+    github_bootstrap_path = ROOT / "tools/kubdee_affiliate/windows/bootstrap_github_release.ps1"
+    github_bootstrap_manifest_path = "tools/kubdee_affiliate/windows/bootstrap_github_release.ps1"
     release_report_path = package_path.with_suffix(package_path.suffix + ".release.json")
     if not args.no_checksum:
         checksum = hashlib.sha256(package_path.read_bytes()).hexdigest()
@@ -228,6 +232,11 @@ def main() -> int:
                 [
                     "Kubdee Affiliate Windows Worker Transfer Checklist",
                     "",
+                    "Option 0: download from GitHub Releases on Windows:",
+                    "- Download bootstrap_github_release.ps1 from the release assets.",
+                    "- Run it in PowerShell. For a private repository, pass -Token or set GITHUB_TOKEN.",
+                    "- It downloads the transfer bundle, verifies checksums, and extracts to C:\\kubdee-affiliate.",
+                    "",
                     "Option A: copy these transfer bundle files to Windows together:",
                     f"- {transfer_bundle_path.name}",
                     f"- {transfer_bundle_checksum_path.name}",
@@ -272,6 +281,8 @@ def main() -> int:
         "windowsTestHandoffBundleEntry": windows_test_handoff_path.name,
         "windowsTestResultTemplate": windows_test_result_template_manifest_path,
         "windowsTestResultTemplateBundleEntry": windows_test_result_template_path.name,
+        "githubBootstrap": github_bootstrap_manifest_path,
+        "githubBootstrapReleaseAsset": github_bootstrap_path.name,
         "manifest": manifest,
     }
     release_report_path.write_text(json.dumps(release_report, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -58,6 +58,7 @@ REQUIRED_WORKFLOW_FRAGMENTS = (
     "actions/setup-python@v5",
     "python3 tools/kubdee_affiliate/prepare_github_release.py",
     "actions/upload-artifact@v4",
+    "tools/kubdee_affiliate/windows/bootstrap_github_release.ps1",
     "dist/kubdee-affiliate-windows-worker-latest.zip.transfer-bundle.zip",
     "dist/github-release-assets.json",
     "dist/github-release-notes.md",
