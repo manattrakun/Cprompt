@@ -120,6 +120,41 @@ def main() -> int:
                 "4. Follow `WINDOWS_TEST_HANDOFF.md`.",
                 "5. Run `14_first_run_diagnostics.cmd` on Windows.",
                 "",
+                "Copy/paste bootstrap command:",
+                "",
+                "```powershell",
+                "powershell -ExecutionPolicy Bypass -File .\\bootstrap_github_release.ps1 `",
+                '  -Repo "manattrakun/Cprompt" `',
+                '  -Tag "latest" `',
+                '  -Destination "C:\\kubdee-affiliate-downloads" `',
+                '  -ExtractRoot "C:\\kubdee-affiliate"',
+                "```",
+                "",
+                "For a private repository:",
+                "",
+                "```powershell",
+                '$env:GITHUB_TOKEN = "github_pat_..."',
+                "powershell -ExecutionPolicy Bypass -File .\\bootstrap_github_release.ps1 `",
+                '  -Repo "manattrakun/Cprompt" `',
+                '  -Tag "latest" `',
+                '  -Destination "C:\\kubdee-affiliate-downloads" `',
+                '  -ExtractRoot "C:\\kubdee-affiliate"',
+                "```",
+                "",
+                "Windows returns:",
+                "",
+                "- `C:\\kubdee-affiliate\\outputs\\support-bundle-*.zip`",
+                "- `C:\\kubdee-affiliate\\outputs\\first-run-diagnostics-*.txt`",
+                "- `C:\\kubdee-affiliate-downloads\\bootstrap-result.json` if bootstrap itself failed before extraction",
+                "",
+                "If bootstrap fails, stop and capture the error text. Check token access, exact asset names, checksum mismatch, write permission, and free disk space before retrying.",
+                "",
+                "Summarize a returned support bundle from the repository root:",
+                "",
+                "```powershell",
+                "python3 tools\\kubdee_affiliate\\summarize_windows_support_bundle.py outputs\\support-bundle-YYYYMMDD-HHMMSS.zip",
+                "```",
+                "",
                 "Manual fallback flow:",
                 "",
                 "1. Download the three transfer bundle assets.",
@@ -134,6 +169,24 @@ def main() -> int:
         ),
         encoding="utf-8",
     )
+
+    notes_text = notes_path.read_text(encoding="utf-8")
+    required_note_fragments = (
+        "Copy/paste bootstrap command:",
+        "powershell -ExecutionPolicy Bypass -File .\\bootstrap_github_release.ps1",
+        '$env:GITHUB_TOKEN = "github_pat_..."',
+        "C:\\kubdee-affiliate\\outputs\\support-bundle-*.zip",
+        "C:\\kubdee-affiliate-downloads\\bootstrap-result.json",
+        "If bootstrap fails",
+        "exact asset names",
+        "free disk space",
+        "summarize_windows_support_bundle.py",
+    )
+    missing_note_fragments = [
+        fragment for fragment in required_note_fragments if fragment not in notes_text
+    ]
+    if missing_note_fragments:
+        raise RuntimeError(f"release notes missing required fragments: {missing_note_fragments}")
 
     print(json.dumps({"releaseManifest": str(manifest_path), "releaseNotes": str(notes_path)}, indent=2))
     return 0
